@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FundPool UI</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        var contractAddress = '0x123...'; // Replace with the address of your FundPool contract
+        var contractABI = [{
+            ...
+        }]; // Replace with the ABI of your FundPool contract
+        var web3 = new Web3(Web3.givenProvider);
+        var fundPool = new web3.eth.Contract(contractABI, contractAddress);
+
+        function createPool() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+            var recipient = document.getElementById('recipient').value;
+            var goal = web3.utils.toWei(document.getElementById('goalAmount').value);
+            var duration = document.getElementById('duration').value;
+
+            fundPool.methods.createPool(id, recipient, duration)
+                .send({
+                    value: goal
+                })
+                .on('transactionHash', function(hash) {
+                    alert('Transaction submitted: ' + hash);
+                })
+                .on('receipt', function(receipt) {
+                    alert('Transaction successful: ' + receipt.transactionHash);
+                    // Update UI with pool details
+                })
+                .on('error', function(error) {
+                    alert('Transaction error: ' + error.message);
+                });
+        }
+
+        function contribute() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+            var amount = web3.utils.toWei(document.getElementById('amount').value);
+
+            fundPool.methods.contribute(id)
+                .send({
+                    value: amount
+                })
+                .on('transactionHash', function(hash) {
+                    alert('Transaction submitted: ' + hash);
+                })
+                .on('receipt', function(receipt) {
+                    alert('Transaction successful: ' + receipt.transactionHash);
+                    // Update UI with pool details
+                })
+                .on('error', function(error) {
+                    alert('Transaction error: ' + error.message);
+                });
+        }
+
+        function closePool() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+
+            fundPool.methods.closePool(id)
+                .send()
+                .on('transactionHash', function(hash) {
+                    alert('Transaction submitted: ' + hash);
+                })
+                .on('receipt', function(receipt) {
+                    alert('Transaction successful: ' + receipt.transactionHash);
+                    // Update UI with pool details
+                })
+                .on('error', function(error) {
+                    alert('Transaction error: ' + error.message);
+                });
+        }
+
+        function refundPool() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+
+            fundPool.methods.refundPool(id)
+                .send()
+                .on('transactionHash', function(hash) {
+                    alert('Transaction submitted: ' + hash);
+                })
+                .on('receipt', function(receipt) {
+                    alert('Transaction successful: ' + receipt.transactionHash);
+                    // Update UI with pool details
+                })
+                .on('error', function(error) {
+                    alert('Transaction error: ' + error.message);
+                });
+        }
+
+        function pausePool() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+            var paused = document.getElementById('paused').checked;
+
+            fundPool.methods.pausePool(id, paused)
+                .send()
+                .on('transactionHash', function(hash) {
+                    alert('Transaction submitted: ' + hash);
+                })
+                .on('receipt', function(receipt) {
+                    alert('Transaction successful : ' + receipt.transactionHash);
+                    // Update UI with pool details
+                })
+                .on('error', function(error) {
+                    alert('Transaction error: ' + error.message);
+                });
+        }
+
+        function execute() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+            var recipient = document.getElementById('recipient').value;
+            var amount = web3.utils.toWei(document.getElementById('amount').value);
+            var data = web3.utils.fromAscii(document.getElementById('data').value);
+
+            fundPool.methods.execute(id, recipient, amount, data)
+                .send()
+                .on('transactionHash', function(hash) {
+                    alert('Transaction submitted: ' + hash);
+                })
+                .on('receipt', function(receipt) {
+                    alert('Transaction successful: ' + receipt.transactionHash);
+                    // Update UI with pool details
+                })
+                .on('error', function(error) {
+                    alert('Transaction error: ' + error.message);
+                });
+        }
+
+        function getPoolDetails() {
+            var id = web3.utils.fromAscii(document.getElementById('poolId').value);
+
+            fundPool.methods.pools(id).call()
+                .then(function(pool) {
+                    document.getElementById('poolIdOutput').textContent = web3.utils.toAscii(pool.id);
+                    document.getElementById('creatorOutput').textContent = pool.creator;
+                    document.getElementById('goalOutput').textContent = web3.utils.fromWei(pool.goal);
+                    document.getElementById('balanceOutput').textContent = web3.utils.fromWei(pool.balance);
+                    document.getElementById('recipientOutput').textContent = pool.recipient;
+                    document.getElementById('deadlineOutput').textContent = new Date(pool.deadline * 1000)
+                        .toLocaleString();
+                    document.getElementById('pausedOutput').textContent = pool.paused;
+                })
+                .catch(function(error) {
+                    alert('Error: ' + error.message);
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <h1>FundPool UI</h1>
+    <h2>Create a Pool</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <label for="recipient">Recipient:</label>
+    <input type="text" id="recipient"><br>
+    <label for="goalAmount">Goal Amount:</label>
+    <input type="text" id="goalAmount"><br>
+    <label for="duration">Duration (seconds):</label>
+    <input type="text" id="duration"><br>
+    <button onclick="createPool()">Create</button>
+    <h2>Contribute to a Pool</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount"><br>
+    <button onclick="contribute()">Contribute</button>
+
+    <h2>Close a Pool</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <button onclick="closePool()">Close</button>
+
+    <h2>Refund a Pool</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <button onclick="refundPool()">Refund</button>
+
+    <h2>Pause a Pool</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <label for="paused">Paused:</label>
+    <input type="checkbox" id="paused"><br>
+    <button onclick="pausePool()">Pause</button> id="paused">
+    <br>
+    <button onclick="pausePool()">Pause</button>
+    <h2>Execute a Pool</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <label for="recipient">Recipient:</label>
+    <input type="text" id="recipient"><br>
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount"><br>
+    <label for="data">Data:</label>
+    <input type="text" id="data"><br>
+    <button onclick="execute()">Execute</button>
+
+    <h2>Get Pool Details</h2>
+    <label for="poolId">Pool ID:</label>
+    <input type="text" id="poolId"><br>
+    <button onclick="getPoolDetails()">Get Details</button>
+
+    <h2>Pool Details</h2>
+    <div id="poolDetails">
+        <p>Pool ID: <span id="poolIdOutput"></span></p>
+        <p>Creator: <span id="creatorOutput"></span></p>
+        <p>Goal: <span id="goalOutput"></span></p>
+        <p>Balance: <span id="balanceOutput"></span></p>
+        <p>Recipient: <span id="recipientOutput"></span></p>
+        <p>Deadline: <span id="deadlineOutput"></span></p>
+        <p>Paused: <span id="pausedOutput"></span></p>
+    </div>
+
+</body>
+
+</html>
