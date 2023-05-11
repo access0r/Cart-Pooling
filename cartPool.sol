@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 contract FundPool {
@@ -134,3 +135,4 @@ contract FundPool {
         delete pools[id];
         emit PoolDeleted(id);
     }
+}
