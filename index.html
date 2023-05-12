@@ -3,12 +3,13 @@
 
 <head>
     <title>FundPool UI</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script>
-        var contractAddress = '0x123...'; // Replace with the address of your FundPool contract
+        var contractAddress = '0x123...'; 
         var contractABI = [{
             ...
-        }]; // Replace with the ABI of your FundPool contract
+        }]; 
         var web3 = new Web3(Web3.givenProvider);
         var fundPool = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -149,66 +150,83 @@
 
 <body>
     <h1>FundPool UI</h1>
-    <h2>Create a Pool</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <label for="recipient">Recipient:</label>
-    <input type="text" id="recipient"><br>
-    <label for="goalAmount">Goal Amount:</label>
-    <input type="text" id="goalAmount"><br>
-    <label for="duration">Duration (seconds):</label>
-    <input type="text" id="duration"><br>
-    <button onclick="createPool()">Create</button>
-    <h2>Contribute to a Pool</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <label for="amount">Amount:</label>
-    <input type="text" id="amount"><br>
-    <button onclick="contribute()">Contribute</button>
 
-    <h2>Close a Pool</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <button onclick="closePool()">Close</button>
+    <div class="poolAction" id="createPool">
+        <h2>Create a Pool</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <label for="recipient">Recipient:</label>
+        <input type="text" id="recipient"><br>
+        <label for="goalAmount">Goal Amount:</label>
+        <input type="text" id="goalAmount"><br>
+        <label for="duration">Duration (seconds):</label>
+        <input type="text" id="duration"><br>
+        <button onclick="createPool()">Create</button>
+    </div>
+    <div class="poolAction" id="contributePool">
+        <h2>Contribute to a Pool</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount"><br>
+        <button onclick="contribute()">Contribute</button>
+    </div>
 
-    <h2>Refund a Pool</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <button onclick="refundPool()">Refund</button>
+    <div class="poolAction" id="closePool">
+        <h2>Close a Pool</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <button onclick="closePool()">Close</button>
+    </div>
 
-    <h2>Pause a Pool</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <label for="paused">Paused:</label>
-    <input type="checkbox" id="paused"><br>
-    <button onclick="pausePool()">Pause</button> id="paused">
-    <br>
-    <button onclick="pausePool()">Pause</button>
-    <h2>Execute a Pool</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <label for="recipient">Recipient:</label>
-    <input type="text" id="recipient"><br>
-    <label for="amount">Amount:</label>
-    <input type="text" id="amount"><br>
-    <label for="data">Data:</label>
-    <input type="text" id="data"><br>
-    <button onclick="execute()">Execute</button>
+    <div class="poolAction" id="refundPool">
+        <h2>Refund a Pool</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <button onclick="refundPool()">Refund</button>
+    </div>
 
-    <h2>Get Pool Details</h2>
-    <label for="poolId">Pool ID:</label>
-    <input type="text" id="poolId"><br>
-    <button onclick="getPoolDetails()">Get Details</button>
+    <div class="poolAction" id="pausePool">
+        <h2>Pause a Pool</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <label for="paused">Paused:</label>
+        <input type="checkbox" id="paused"><br>
+        <button onclick="pausePool()">Pause</button> id="paused">
+        <br>
+        <button onclick="pausePool()">Pause</button>
+    </div>
+    <div class="poolAction" id="executePool">
+        <h2>Execute a Pool</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <label for="recipient">Recipient:</label>
+        <input type="text" id="recipient"><br>
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount"><br>
+        <label for="data">Data:</label>
+        <input type="text" id="data"><br>
+        <button onclick="execute()">Execute</button>
+    </div>
 
-    <h2>Pool Details</h2>
-    <div id="poolDetails">
-        <p>Pool ID: <span id="poolIdOutput"></span></p>
-        <p>Creator: <span id="creatorOutput"></span></p>
-        <p>Goal: <span id="goalOutput"></span></p>
-        <p>Balance: <span id="balanceOutput"></span></p>
-        <p>Recipient: <span id="recipientOutput"></span></p>
-        <p>Deadline: <span id="deadlineOutput"></span></p>
-        <p>Paused: <span id="pausedOutput"></span></p>
+    <div class="poolAction" id="poolDetailRequest">
+        <h2>Get Pool Details</h2>
+        <label for="poolId">Pool ID:</label>
+        <input type="text" id="poolId"><br>
+        <button onclick="getPoolDetails()">Get Details</button>
+    </div>
+
+    <div class="poolAction">
+        <h2>Pool Details</h2>
+        <div id="poolDetails">
+            <p>Pool ID: <span id="poolIdOutput"></span></p>
+            <p>Creator: <span id="creatorOutput"></span></p>
+            <p>Goal: <span id="goalOutput"></span></p>
+            <p>Balance: <span id="balanceOutput"></span></p>
+            <p>Recipient: <span id="recipientOutput"></span></p>
+            <p>Deadline: <span id="deadlineOutput"></span></p>
+            <p>Paused: <span id="pausedOutput"></span></p>
+        </div>
     </div>
 
 </body>
